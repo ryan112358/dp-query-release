@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from scipy.special import softmax
 
 """
 Privacy mechanisms
@@ -18,8 +19,7 @@ def exponential_mech(scores, eps0, sensitivity):
         idxs = idxs[scores != -np.infty]
         return np.random.choice(idxs)
 
-    EM_dist = np.exp(2 * eps0 * scores / (2 * sensitivity), dtype=np.float128)
-    EM_dist = EM_dist / EM_dist.sum()
+    EM_dist = softmax(2 * eps0 * scores / (2 * sensitivity))
     max_query_idx = sample(EM_dist)
     return max_query_idx
 
